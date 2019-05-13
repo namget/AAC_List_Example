@@ -1,9 +1,12 @@
 package com.namget.list_aac.ui.main
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.namget.list_aac.R
 import com.namget.list_aac.data.remote.NetworkManger
 import com.namget.list_aac.data.repository.NetworkRepositoryImpl
@@ -31,8 +34,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
         myRecyclerView.apply {
             mainAdapter = MainAdapter(arrayListOf())
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = GridLayoutManager(this@MainActivity, 3)
             adapter = mainAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                }
+            })
         }
     }
 
@@ -51,7 +59,25 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         })
 
+        mainViewModel.isLoading.observe(this, Observer {
+            if (it) {
+//                preventTouch()
+            } else {
+//                clearTouch()
+            }
+        })
+
+
+        mainViewModel.eventData.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                switchLayoutManager.setImageResource(R.drawable.ic_format_gird_black_24dp)
+            }
+        })
+
+
         binding.lifecycleOwner = this
     }
+
+
 
 }

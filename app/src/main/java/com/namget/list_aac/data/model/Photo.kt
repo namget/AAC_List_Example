@@ -7,6 +7,7 @@ data class Photo(
     val description: String?,
     @SerializedName("alt_description")
     val altDescription: String,
+    @SerializedName("urls")
     val urls: PhotoUrl
 
 )
