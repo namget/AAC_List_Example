@@ -7,23 +7,35 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.namget.list_aac.R
 import com.namget.list_aac.data.model.Photo
-import com.namget.list_aac.databinding.ItemImageGridBinding
+import com.namget.list_aac.databinding.ItemImageHolderBinding
 import com.namget.list_aac.ui.base.BaseAdapterInf
+import com.namget.list_aac.ui.base.RecyclerItemListener
 import com.namget.list_aac.util.setImageWithGlide
 
-class MainAdapter(val list: ArrayList<Photo>) : RecyclerView.Adapter<MainAdapter.mViewHodler>(),
+class MainAdapter(val list: ArrayList<Photo>) :
+    RecyclerView.Adapter<MainAdapter.mViewHolder>(),
     BaseAdapterInf<ArrayList<Photo>> {
 
-    class mViewHodler(val view: ItemImageGridBinding) : RecyclerView.ViewHolder(view.root) {
-        var gridImage: ImageView
+    private lateinit var recyclerItemListener: RecyclerItemListener
+
+    inner class mViewHolder(val view: ItemImageHolderBinding) : RecyclerView.ViewHolder(view.root) {
+        var ImageHolder: ImageView
 
         init {
-            gridImage = view.girdImage
+            ImageHolder = view.ImageHolder
+            view.rippleHolder.setOnClickListener {
+                recyclerItemListener.itemClick(ImageHolder, list[adapterPosition].urls.full)
+            }
         }
 
         fun bind(photo: Photo) {
-            gridImage.setImageWithGlide(photo.urls.thumb)
+            view.photo = photo
+            ImageHolder.setImageWithGlide(photo.urls.thumb)
         }
+    }
+
+    fun setItemClickListener(recyclerItemListener: RecyclerItemListener) {
+        this.recyclerItemListener = recyclerItemListener
     }
 
     override fun addItems(items: ArrayList<Photo>) {
@@ -42,14 +54,14 @@ class MainAdapter(val list: ArrayList<Photo>) : RecyclerView.Adapter<MainAdapter
         list.clear()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mViewHodler {
-        val item: ItemImageGridBinding =
-            DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_image_grid, parent, false)
-        return mViewHodler(item)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mViewHolder {
+        val item: ItemImageHolderBinding =
+            DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_image_holder, parent, false)
+        return mViewHolder(item)
     }
 
     override fun getItemCount(): Int = list.size
-    override fun onBindViewHolder(holder: mViewHodler, position: Int) {
+    override fun onBindViewHolder(holder: mViewHolder, position: Int) {
         holder.bind(list[position])
     }
 }

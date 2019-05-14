@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="photo" type="com.namget.list_aac.data.model.Photo"/>
+
+    </data>
+    <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mmmm"
+            android:layout_width="match_parent"
+            card:cardCornerRadius="5dp"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/ImageHolder"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:transitionName="@string/imageViewTransition"
+                android:layout_height="200dp"/>
+
+        <FrameLayout
+                android:id="@+id/rippleHolder"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?android:selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

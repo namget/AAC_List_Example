@@ -1,8 +1,6 @@
 package com.namget.list_aac.ui.main
 
-import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.namget.list_aac.data.model.Photo
@@ -29,26 +27,32 @@ class MainViewModel(
 
     private val _photoList = MutableLiveData<ArrayList<Photo>>()
     val photoList: LiveData<ArrayList<Photo>> get() = _photoList
-
+    var currentPage = 1
 
     enum class EventList {
-        SWITCH_LAYOUT
+        SWITCH_LAYOUT_MANAGER
     }
 
     fun switchLayoutManager(view: View) {
-        println("1111111111111")
-        Log.e("test", "ttttttttttttt")
-        _eventData.value = Event(EventList.SWITCH_LAYOUT)
+        _eventData.value = Event(EventList.SWITCH_LAYOUT_MANAGER)
+    }
+
+    fun loadMore() {
+        if (isLoading.value == false) {
+            currentPage++
+            getPhotoList()
+        }
     }
 
     fun getPhotoList() {
         _isLoading.value = true
         addDisposable(
-            repository.getPhotoList(Key.cliendKey).subscribeOn(Schedulers.newThread())
+            repository.getPhotoList(clientId = Key.cliendKey, page = currentPage).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
                         _photoList.value = it
+                        _isLoading.value = false
                     },
                     logger::e
                 )

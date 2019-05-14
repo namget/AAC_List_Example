@@ -10,7 +10,7 @@ interface Repository {
         clientId: String,
         page: Int = 1,
         perPage: Int = PER_PAGE,
-        orderBy: String = Key.ORDER_BY.LASTEST.type
+        orderBy: String = Key.ORDER_BY.POPULAR.type
     ): Single<ArrayList<Photo>>
 
     fun getPhotoDetail(id: String): Single<Photo>
